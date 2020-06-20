@@ -23,7 +23,8 @@ function execSQLQuery(sqlQry, res){
     port     : 3306,
     user     : 'u390586897_casconi',
     password : 'casconi12',
-    database : 'u390586897_livrocaixa_db'
+    database : 'u390586897_livrocaixa_db',
+    timeout  : 60000
   });
  
   connection.query(sqlQry, function(error, results, fields){
