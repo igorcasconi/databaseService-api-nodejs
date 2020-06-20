@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();         
 const bodyParser = require('body-parser');
-const port = 3000; //porta padrão
+const port = server.listen(process.env.PORT || 3000);//porta padrão
 const mysql = require('mysql');
 
 //configurando o body parser para pegar POSTS mais tarde
