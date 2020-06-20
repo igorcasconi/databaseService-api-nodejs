@@ -12,7 +12,7 @@ app.use(bodyParser.json());
 //definindo as rotas
 const router = express.Router();
 router.get('/', (req, res) => res.json({ message: 'Funcionando!' }));
-app.use('/api',router, cors());
+app.use('/api',router);
 
 //inicia o servidor
 app.listen(port);
@@ -38,7 +38,7 @@ function execSQLQuery(sqlQry, res){
   });
 }
 
-router.get('/caixas', (req, res) =>{
+router.get('/caixas',cors(), (req, res) =>{
     execSQLQuery('SELECT * FROM Caixa', res);
 })
 
