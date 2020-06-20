@@ -19,11 +19,11 @@ console.log('API funcionando!');
 
 function execSQLQuery(sqlQry, res){
   const connection = mysql.createConnection({
-    host     : 'localhost',
+    host     : '185.201.10.94',
     port     : 3306,
-    user     : 'igorcasconi',
-    password : '46oliveira',
-    database : 'livrocaixa_db'
+    user     : 'u390586897_casconi',
+    password : 'casconi12',
+    database : 'u390586897_livrocaixa_db'
   });
  
   connection.query(sqlQry, function(error, results, fields){
