@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();         
 const bodyParser = require('body-parser');
-const port = 3000;//porta padrão
+const port =  process.env.PORT || 3000;//porta padrão
 const mysql = require('mysql');
 
 //configurando o body parser para pegar POSTS mais tarde
@@ -15,7 +15,7 @@ app.use('/api', router);
 
 //inicia o servidor
 app.listen(port);
-console.log('API funcionando!');
+console.log('API funcionando!',port);
 
 function execSQLQuery(sqlQry, res){
   const connection = mysql.createConnection({
