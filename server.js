@@ -38,6 +38,16 @@ function execSQLQuery(sqlQry, res){
   });
 }
 
+router.get('/caixas/:id?', (req, res) =>{
+  let filter = '';
+  if(req.params.id) filter = ' WHERE Caixa_userFirebase=' + req.params.id;
+  execSQLQuery('SELECT * FROM Caixa' + filter, res);
+})
+
+router.get('/insert-caixa/:id', (req, res) => {
+  execSQLQuery('INSERT IGNORE INTO Caixa (Caixa_userFirebase) VALUES (' + req.params.id + ')', res);
+})
+
 router.get('/caixas',cors(), (req, res) =>{
     execSQLQuery('SELECT * FROM Caixa', res);
 })
