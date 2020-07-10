@@ -38,14 +38,14 @@ function execSQLQuery(sqlQry, res){
   });
 }
 
-router.get('/caixas/:id?', (req, res) =>{
+router.get('/caixa_saldo/:id?', (req, res) =>{
   let filter = '';
-  if(req.params.id) filter = ' WHERE Caixa_userFirebase=' + req.params.id;
-  execSQLQuery('SELECT * FROM Caixa' + filter, res);
+  if(req.params.id) filter = ' WHERE Caixa_Saldo_userFirebase="' + req.params.id + '"';
+  execSQLQuery('SELECT * FROM Caixa_Saldo' + filter, res);
 })
 
 router.get('/insert-caixa/:id', (req, res) => {
-  execSQLQuery('INSERT IGNORE INTO Caixa (Caixa_userFirebase) VALUES (' + req.params.id + ')', res);
+  execSQLQuery('INSERT IGNORE INTO Caixa_Saldo (Caixa_Saldo_userFirebase) VALUES ("' + req.params.id + '")', res);
 })
 
 router.get('/caixas',cors(), (req, res) =>{
