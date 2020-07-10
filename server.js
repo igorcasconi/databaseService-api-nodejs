@@ -23,7 +23,7 @@ function execSQLQuery(sqlQry, res){
     host     : 'mysql669.umbler.com',
     port     : 41890,
     user     : 'casconi_lc',
-    password : '46Olivera',
+    password : '46Oliveira',
     database : 'livrocaixa_db',
     timeout  : 60000
   });
