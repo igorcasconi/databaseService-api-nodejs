@@ -56,8 +56,8 @@ router.get('/insert-mov/:id/:type', (req, res) =>{
   const paymode = req.body.paymode;
   // console.log(window.location.pathname);
   execSQLQuery('INSERT INTO Movimentacao_Caixa (Movimentacao_Caixa_product,Movimentacao_Caixa_value,Movimentacao_Caixa_date, \
-  Movimentacao_Caixa_userFirebase,Movimentacao_Caixa_Tipo_Movimentacao_id,Movimentacao_Caixa_Paymode) VALUES (' + product + ',' + value + ',' +
-  'CONCAT(DATE_FORMAT(' + date +'"%Y-%m-%d"), "' + time + '",' + req.params.id + ',' + req.params.type + ',' + paymode + ');', res);
+  Movimentacao_Caixa_userFirebase,Movimentacao_Caixa_Tipo_Movimentacao_id,Movimentacao_Caixa_Paymode) VALUES ("' + product + '",' + value + ',' +
+  'CONCAT(DATE_FORMAT(' + date +',"%Y-%m-%d"), "' + time + '"),"' + req.params.id + '","' + req.params.type + '","' + paymode + '");', res);
 })
 
 router.get('/caixas/:id?', (req, res) =>{
