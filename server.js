@@ -4,6 +4,7 @@ const app = express();
 const bodyParser = require('body-parser');
 const port =  process.env.PORT || 3000;//porta padrão
 const mysql = require('mysql');
+import { format } from 'date-fns';
 
 //configurando o body parser para pegar POSTS mais tarde
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -48,8 +49,16 @@ router.get('/insert-caixa/:id', (req, res) => {
   execSQLQuery('INSERT IGNORE INTO Caixa_Saldo (Caixa_Saldo_userFirebase) VALUES ("' + req.params.id + '")', res);
 })
 
-router.get('/caixas',cors(), (req, res) =>{
-    execSQLQuery('SELECT * FROM Caixa', res);
+router.get('/insert-mov/:id/:type', (req, res) =>{
+  const product = req.body.product.substring(0,150);
+  const value = req.body.value.substring(0,50);
+  const date = req.body.date.substring(0,50);
+  const time = req.body.time.substring(0,50);
+  const paymode = req.body.paymode.substring(0,150);
+
+  execSQLQuery('INSERT INTO Movimentacao_Caixa (Movimentacao_Caixa_product,Movimentacao_Caixa_value,Movimentacao_Caixa_date, \
+  Movimentacao_Caixa_userFirebase,Movimentacao_Caixa_Tipo_Movimentacao_id,Movimentacao_Caixa_Paymode) VALUES (' + product + ',' + value + ',' +
+  format(date,'yyyy-MM-dd') + time + ',' + req.params.id + ',' + req.params.type + ',' + paymode + ');', res);
 })
 
 router.get('/caixas/:id?', (req, res) =>{
