@@ -49,11 +49,11 @@ router.get('/insert-caixa/:id', (req, res) => {
 })
 
 router.get('/insert-mov/:id/:type', (req, res) =>{
-  const product = req.body.product.substring(0,150);
-  const value = req.body.value.substring(0,50);
-  const date = req.body.date.substring(0,50);
-  const time = req.body.time.substring(0,50);
-  const paymode = req.body.paymode.substring(0,150);
+  const product = req.body.product;
+  const value = req.body.value;
+  const date = req.body.date;
+  const time = req.body.time;
+  const paymode = req.body.paymode;
   console.log(window.location.pathname);
   execSQLQuery('INSERT INTO Movimentacao_Caixa (Movimentacao_Caixa_product,Movimentacao_Caixa_value,Movimentacao_Caixa_date, \
   Movimentacao_Caixa_userFirebase,Movimentacao_Caixa_Tipo_Movimentacao_id,Movimentacao_Caixa_Paymode) VALUES (' + product + ',' + value + ',' +
