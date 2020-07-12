@@ -48,7 +48,7 @@ router.get('/insert-caixa/:id', (req, res) => {
   execSQLQuery('INSERT IGNORE INTO Caixa_Saldo (Caixa_Saldo_userFirebase) VALUES ("' + req.params.id + '")', res);
 })
 
-router.get('/insert-mov/:id/:type', (req, res) =>{
+router.post('/insert-mov/', (req, res) =>{
   const product = req.body.product.substring(0,150);
   const value = req.body.value.substring(0,50);
   const date = req.body.date.substring(0,50);
