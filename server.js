@@ -65,6 +65,6 @@ router.post('/insert-mov/:id/:type', (req, res) =>{
 router.get('/movs/:id/:type', (req, res) =>{
     let filter = '';
     if(req.params.id) filter = ' WHERE Movimentacao_Caixa_userFirebase="' + req.params.id + '" AND Movimentacao_Caixa_Tipo_Movimentacao_id = ' + req.params.type;
-    execSQLQuery('SELECT *, DATE_FORMAT(a.Movimentacao_Caixa_date, "%d/%m/%Y") as data_formatada, DATE_FORMAT(a.Movimentacao_Caixa_date, "%H:%i") as hora_formatada \
+    execSQLQuery('SELECT *, DATE_FORMAT(Movimentacao_Caixa_date, "%d/%m/%Y") as data_formatada, DATE_FORMAT(Movimentacao_Caixa_date, "%H:%i") as hora_formatada \
      FROM Movimentacao_Caixa' + filter + ' ORDER BY Movimentacao_Caixa_date DESC', res);
 })
