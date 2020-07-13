@@ -58,10 +58,12 @@ router.post('/insert-mov/:id/:type', (req, res) =>{
   execSQLQuery('INSERT INTO Movimentacao_Caixa (Movimentacao_Caixa_product,Movimentacao_Caixa_value,Movimentacao_Caixa_date, \
   Movimentacao_Caixa_userFirebase,Movimentacao_Caixa_Tipo_Movimentacao_id,Movimentacao_Caixa_Paymode) VALUES ("' + product + '",' + value + ',' +
   'CAST(CONCAT(DATE_FORMAT(STR_TO_DATE("' + date +'", "%d/%m/%Y"),"%Y-%m-%d"), " ' + time + '") AS DATETIME),"' + req.params.id + '","' + req.params.type + '","' + paymode + '");', res);
+
+  execSQLQuery('UPDATE Caixa_Saldo SET Caixa_Saldo_value = Caixa_Saldo_value + ' + value + ' WHERE Caixa_Saldo_userFirebase = "' + req.params.id + '";', res);
 })
 
-router.get('/caixas/:id?', (req, res) =>{
+router.get('/movs/:id/:type', (req, res) =>{
     let filter = '';
-    if(req.params.id) filter = ' WHERE Caixa_id=' + parseInt(req.params.id);
-    execSQLQuery('SELECT * FROM Caixa' + filter, res);
+    if(req.params.id) filter = ' WHERE Movimentacao_Caixa_userFirebase="' + req.params.id + '" AND Movimentacao_Caixa_Tipo_Movimentacao_id = ' + req.params.type;
+    execSQLQuery('SELECT * FROM Movimentacao_Caixa' + filter + ' ORDER BY Movimentacao_Caixa_date DESC', res);
 })
