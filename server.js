@@ -38,7 +38,7 @@ function execSQLQuery(sqlQry, res){
   });
 }
 
-router.get('/caixa_saldo/:id?', (req, res) =>{
+router.get('/caixa_saldo/:id?', cors(), (req, res) =>{
   let filter = '';
   if(req.params.id) filter = ' WHERE Caixa_Saldo_userFirebase="' + req.params.id + '"';
   execSQLQuery('SELECT * FROM Caixa_Saldo' + filter, res);
@@ -83,14 +83,14 @@ router.get('/movs/:id/:type', cors(), (req, res) =>{
      FROM Movimentacao_Caixa' + filter + ' ORDER BY Movimentacao_Caixa_date DESC', res);
 })
 
-router.get('/movs-year/:id', (req, res) =>{
+router.get('/movs-year/:id', cors(), (req, res) =>{
   let filter = '';
   if(req.params.id) filter = ' WHERE a.Movimentacao_Caixa_userFirebase="' + req.params.id + '"';
   execSQLQuery('SELECT YEAR(a.Movimentacao_Caixa_date) AS "mes", SUM(a.Movimentacao_Caixa_value) AS "soma" FROM Movimentacao_Caixa AS a ' + filter + ' GROUP BY YEAR(Movimentacao_Caixa_date) \
   ORDER BY YEAR(Movimentacao_Caixa_date) DESC', res);
 })
 
-router.get('/movs-month/:id', (req, res) =>{
+router.get('/movs-month/:id', cors(), (req, res) =>{
   let filter = '';
   if(req.params.id) filter = ' WHERE a.Movimentacao_Caixa_userFirebase="' + req.params.id + '"';
   execSQLQuery('SELECT a.Movimentacao_Caixa_id, MONTHNAME(a.Movimentacao_Caixa_date) AS "mes",YEAR(a.Movimentacao_Caixa_date) AS "ano", SUM(a.Movimentacao_Caixa_value) AS "soma" \
