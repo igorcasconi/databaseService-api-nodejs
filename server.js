@@ -76,7 +76,7 @@ router.get('/delete-mov/:id/:idmov/:type/:value', (req, res) => {
   }
 })
 
-router.get('/movs/:id/:type', (req, res) =>{
+router.get('/movs/:id/:type', cors(), (req, res) =>{
     let filter = '';
     if(req.params.id) filter = ' WHERE Movimentacao_Caixa_userFirebase="' + req.params.id + '" AND Movimentacao_Caixa_Tipo_Movimentacao_id = ' + req.params.type;
     execSQLQuery('SELECT *, DATE_FORMAT(Movimentacao_Caixa_date, "%d/%m/%Y") as data_formatada, DATE_FORMAT(Movimentacao_Caixa_date, "%H:%i") as hora_formatada \
