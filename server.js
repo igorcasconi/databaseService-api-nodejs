@@ -59,7 +59,7 @@ router.post('/insert-mov/:id/:type', (req, res) =>{
   Movimentacao_Caixa_userFirebase,Movimentacao_Caixa_Tipo_Movimentacao_id,Movimentacao_Caixa_Paymode) VALUES ("' + product + '",' + value + ',' +
   'CAST(CONCAT(DATE_FORMAT(STR_TO_DATE("' + date +'", "%d/%m/%Y"),"%Y-%m-%d"), " ' + time + '") AS DATETIME),"' + req.params.id + '","' + req.params.type + '","' + paymode + '");', res);
   
-  if( type === 1) {
+  if( req.params.type == 1) {
     execSQLQuery('UPDATE Caixa_Saldo SET Caixa_Saldo_value = Caixa_Saldo_value + ' + value + ' WHERE Caixa_Saldo_userFirebase = "' + req.params.id + '";', res);
   } else {
     execSQLQuery('UPDATE Caixa_Saldo SET Caixa_Saldo_value = Caixa_Saldo_value - ' + value + ' WHERE Caixa_Saldo_userFirebase = "' + req.params.id + '";', res);
