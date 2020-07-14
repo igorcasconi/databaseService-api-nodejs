@@ -54,7 +54,7 @@ router.post('/insert-mov/:id/:type', (req, res) =>{
   const date = req.body.date;
   const time = req.body.time;
   const paymode = req.body.paymode;
-  // console.log(window.location.pathname);
+  
   execSQLQuery('INSERT INTO Movimentacao_Caixa (Movimentacao_Caixa_product,Movimentacao_Caixa_value,Movimentacao_Caixa_date, \
   Movimentacao_Caixa_userFirebase,Movimentacao_Caixa_Tipo_Movimentacao_id,Movimentacao_Caixa_Paymode) VALUES ("' + product + '",' + value + ',' +
   'CAST(CONCAT(DATE_FORMAT(STR_TO_DATE("' + date +'", "%d/%m/%Y"),"%Y-%m-%d"), " ' + time + '") AS DATETIME),"' + req.params.id + '","' + req.params.type + '","' + paymode + '");', res);
@@ -64,6 +64,10 @@ router.post('/insert-mov/:id/:type', (req, res) =>{
   } else {
     execSQLQuery('UPDATE Caixa_Saldo SET Caixa_Saldo_value = Caixa_Saldo_value - ' + value + ' WHERE Caixa_Saldo_userFirebase = "' + req.params.id + '";', res);
   }
+})
+
+router.get('/delete-mov/:id', (req, res) => {
+  execSQLQuery('DELETE FROM Movimentacao_Caixa WHERE Movimentacao_Caixa_id = ' + req.params.id, res);
 })
 
 router.get('/movs/:id/:type', (req, res) =>{
