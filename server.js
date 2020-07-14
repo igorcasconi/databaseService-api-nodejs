@@ -66,13 +66,13 @@ router.post('/insert-mov/:id/:type', (req, res) =>{
   }
 })
 
-router.get('/delete-mov/:id/:idMov/:type/:value', (req, res) => {
-  execSQLQuery('DELETE FROM Movimentacao_Caixa WHERE Movimentacao_Caixa_id = ' + req.params.idMov, res);
+router.get('/delete-mov/:id/:idmov/:type/:value', (req, res) => {
+  execSQLQuery('DELETE FROM Movimentacao_Caixa WHERE Movimentacao_Caixa_id = ' + req.params.idmov, res);
 
   if(req.params.type == 1) {
-    execSQLQuery('UPDATE Caixa_Saldo SET Caixa_Saldo_value = Caixa_Saldo_value - ' + value + ' WHERE Caixa_Saldo_userFirebase = "' + req.params.id + '";', res);
+    execSQLQuery('UPDATE Caixa_Saldo SET Caixa_Saldo_value = Caixa_Saldo_value - ' + req.params.value + ' WHERE Caixa_Saldo_userFirebase = "' + req.params.id + '";', res);
   } else {
-    execSQLQuery('UPDATE Caixa_Saldo SET Caixa_Saldo_value = Caixa_Saldo_value + ' + value + ' WHERE Caixa_Saldo_userFirebase = "' + req.params.id + '";', res);
+    execSQLQuery('UPDATE Caixa_Saldo SET Caixa_Saldo_value = Caixa_Saldo_value + ' + req.params.value + ' WHERE Caixa_Saldo_userFirebase = "' + req.params.id + '";', res);
   }
 })
 
