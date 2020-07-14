@@ -24,6 +24,7 @@ var pool = mysql.createPool({
     user     : 'casconi_lc',
     password : '46Oliveira',
     database : 'livrocaixa_db',
+    timeout  : 6000
 });
 
 router.get('/caixa_saldo/:id?', cors(), (req, res) =>{
