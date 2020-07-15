@@ -22,5 +22,10 @@ app.get('/saldo/:userFirebase', (req, res) => {
     res.json(saldo);
 });
 
+app.get('/saldo/', (req, res) => {
+    const saldo = Caixa_Saldo.findAll();
+    res.json(saldo);
+});
+
 app.listen(3000);
 
