@@ -3,7 +3,8 @@
     "username": "casconi_lc",
     "password": "46Oliveira",
     "database": "livrocaixa_db",
-    "host": "mysql669.umbler.com:41890",
+    "host": "mysql669.umbler.com",
+    "port" : 41890,
     "dialect": "mysql"
   },
   "test": {
@@ -17,7 +18,8 @@
     "username": "casconi_lc",
     "password": "46Oliveira",
     "database": "livrocaixa_db",
-    "host": "mysql669.umbler.com:41890",
+    "host": "mysql669.umbler.com",
+    "port": 41890,
     "dialect": "mysql"
   }
 }
