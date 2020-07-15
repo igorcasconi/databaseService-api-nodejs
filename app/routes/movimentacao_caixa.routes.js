@@ -8,6 +8,8 @@ module.exports = app => {
 
     router.get("/movs-year/:id", Movimentacao_Caixa.movYear);
 
+    router.get("/movs-detail-year/:id/:year", Movimentacao_Caixa.movDetailYear);
+
     router.get("/movs-month/:id", Movimentacao_Caixa.movMonth);
 
     app.use('/api/movimentacao_caixa', router);
