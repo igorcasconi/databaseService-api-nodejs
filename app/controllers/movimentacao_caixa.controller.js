@@ -2,6 +2,7 @@ const db = require("../models");
 const { sequelize } = require("../models");
 const Movimentacao_Caixa = db.movimentacao_caixa;
 const Op = db.Sequelize.Op;
+const strToDate = require('../config/strToDate');
 
 exports.create = (req, res) => {
     // Validate request
@@ -17,14 +18,13 @@ exports.create = (req, res) => {
       product: req.body.product,
       value: req.body.value,
       paymode: req.body.paymode,
-      date: req.body.date,
-      time: req.body.time
+      date: strToDate(req.body.date) + ' ' + req.body.time
     };
   
     Movimentacao_Caixa.create({
       Movimentacao_Caixa_product: mov_caixa.product,
       Movimentacao_Caixa_value: mov_caixa.value,
-      Movimentacao_Caixa_date: [sequelize.fn('cast', [sequelize.fn('concat', [sequelize.fn('date_format', [sequelize.fn('str_to_date', mov_caixa.date, '%d/%m/%Y')],'%Y-%m-%d')],' ',mov_caixa.time)], 'datetime')],
+      Movimentacao_Caixa_date: mov_caixa.date,
       Movimentacao_Caixa_userFirebase: req.params.id,
       Movimentacao_Caixa_Tipo_Movimentacao_id: req.params.type,
       Movimentacao_Caixa_Paymode: mov_caixa.paymode
