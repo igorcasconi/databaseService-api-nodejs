@@ -5,7 +5,7 @@ const { Caixa_Saldo } = require('./app/models');
 
 //configurando o body parser para pegar POSTS mais tarde
 app.use(bodyParser.urlencoded({ extended: false }));
-// app.use(bodyParser.json());
+app.use(bodyParser.json());
 
 // app.use(express.urlencoded({ extended: false }));
 
