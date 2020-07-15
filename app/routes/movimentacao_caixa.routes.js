@@ -6,5 +6,9 @@ module.exports = app => {
 
     router.get("/movs/:id/:type", Movimentacao_Caixa.findAll);
 
+    router.get("/movs-year/:id", Movimentacao_Caixa.movYear);
+
+    router.get("/movs-month/:id", Movimentacao_Caixa.movMonth);
+
     app.use('/api/movimentacao_caixa', router);
 }

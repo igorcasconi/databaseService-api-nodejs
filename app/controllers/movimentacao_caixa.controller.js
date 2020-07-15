@@ -39,8 +39,6 @@ exports.create = (req, res) => {
           err.message || "Some error occurred while creating the Tutorial."
       });
     });
-
-
 };
 
 exports.findAll = (req, res) => {
@@ -49,7 +47,8 @@ exports.findAll = (req, res) => {
       [sequelize.fn('date_format', sequelize.col('Movimentacao_Caixa_date'), '%d/%m/%Y'), 'data_formatada'],
       [sequelize.fn('date_format', sequelize.col('Movimentacao_Caixa_date'), '%H:%i'), 'hora_formatada'],
       'Movimentacao_Caixa_Paymode'],
-        where: {Movimentacao_Caixa_userFirebase: req.params.id, Movimentacao_Caixa_Tipo_Movimentacao_id: req.params.type} })
+        where: {Movimentacao_Caixa_userFirebase: req.params.id, Movimentacao_Caixa_Tipo_Movimentacao_id: req.params.type},
+        order: [['Movimentacao_Caixa_date', 'DESC']] })
       .then(data => {
         res.send(data);
       })
@@ -59,5 +58,44 @@ exports.findAll = (req, res) => {
             err.message || "Some error occurred while retrieving."
         });
     });
+};
+
+exports.movYear = (req, res) => {
+  Movimentacao_Caixa.findAll(
+    { attributes: [[sequelize.fn('year', sequelize.col('Movimentacao_Caixa_date')), 'ano'],
+    [sequelize.fn('sum', sequelize.col('Movimentacao_Caixa_value')), 'soma'],
+    ],
+      where: {Movimentacao_Caixa_userFirebase: req.params.id},
+      order: [[[sequelize.fn('year', sequelize.col('Movimentacao_Caixa_date'))], 'DESC']] })
+    .then(data => {
+      res.send(data);
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving."
+      });
+  });
+};
+
+
+exports.movMonth = (req, res) => {
+  Movimentacao_Caixa.findAll(
+    { attributes: ['Movimentacao_Caixa_id',[sequelize.fn('monthname', sequelize.col('Movimentacao_Caixa_date')), 'mes'],
+    [sequelize.fn('year', sequelize.col('Movimentacao_Caixa_date')), 'ano'],
+    [sequelize.fn('sum', sequelize.col('Movimentacao_Caixa_value')), 'soma'],
+    ],
+      where: {Movimentacao_Caixa_userFirebase: req.params.id},
+      group: [[[sequelize.fn('monthname', sequelize.col('Movimentacao_Caixa_date')), 'mes'],[sequelize.fn('year', sequelize.col('Movimentacao_Caixa_date')), 'ano']]],
+      order: [[[sequelize.fn('year', sequelize.col('Movimentacao_Caixa_date'))], 'DESC']] })
+    .then(data => {
+      res.send(data);
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving."
+      });
+  });
 };
 
