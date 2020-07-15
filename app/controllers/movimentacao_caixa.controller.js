@@ -86,7 +86,7 @@ exports.movMonth = (req, res) => {
     [sequelize.fn('sum', sequelize.col('Movimentacao_Caixa_value')), 'soma'],
     ],
       where: {Movimentacao_Caixa_userFirebase: req.params.id},
-      group: [[[sequelize.fn('monthname', sequelize.col('Movimentacao_Caixa_date')), 'mes'],[sequelize.fn('year', sequelize.col('Movimentacao_Caixa_date')), 'ano']]],
+      group: [[[sequelize.fn('monthname', sequelize.col('Movimentacao_Caixa_date')), 'mes'],[sequelize.fn('year', sequelize.col('Movimentacao_Caixa_date'))], 'ano']],
       order: [[[sequelize.fn('year', sequelize.col('Movimentacao_Caixa_date'))], 'DESC']] })
     .then(data => {
       res.send(data);
