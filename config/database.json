@@ -1,0 +1,23 @@
+{
+  "development": {
+    "username": "casconi_lc",
+    "password": "46Oliveira",
+    "database": "livrocaixa_db",
+    "host": "mysql669.umbler.com",
+    "dialect": "mysql"
+  },
+  "test": {
+    "username": "root",
+    "password": null,
+    "database": "database_test",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  },
+  "production": {
+    "username": "casconi_lc",
+    "password": "46Oliveira",
+    "database": "livrocaixa_db",
+    "host": "mysql669.umbler.com",
+    "dialect": "mysql"
+  }
+}

@@ -2,10 +2,10 @@
   "name": "nodemysql",
   "version": "1.0.0",
   "description": "api conexão mysql",
-  "main": "server.js",
+  "main": "server2.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "start": "node server2.js"
   },
   "author": "igorcasconi",
   "license": "ISC",
@@ -13,6 +13,10 @@
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
     "express": "^4.17.1",
-    "mysql": "^2.18.1"
+    "mysql": "^2.18.1",
+    "sequelize": "^6.3.3"
+  },
+  "devDependencies": {
+    "sequelize-cli": "^6.2.0"
   }
 }
