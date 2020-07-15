@@ -2,7 +2,7 @@ const db = require("../models");
 const { sequelize } = require("../models");
 const Movimentacao_Caixa = db.movimentacao_caixa;
 const Op = db.Sequelize.Op;
-const strToDate = require('../config/strToDate');
+const strToDate = require('../../config/strToDate');
 
 exports.create = (req, res) => {
     // Validate request
