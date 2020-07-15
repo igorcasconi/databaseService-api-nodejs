@@ -20,12 +20,23 @@ exports.create = (req, res) => {
       time: req.body.time
     };
   
-    // Save Movimentacao in the database
-    const movimentacao = await sequelize.query('INSERT INTO Movimentacao_Caixa (Movimentacao_Caixa_product,Movimentacao_Caixa_value,Movimentacao_Caixa_date, \
-    Movimentacao_Caixa_userFirebase,Movimentacao_Caixa_Tipo_Movimentacao_id,Movimentacao_Caixa_Paymode) VALUES ("' + mov_caixa.product + '",' + mov_caixa.value + ',' +
-    'CAST(CONCAT(DATE_FORMAT(STR_TO_DATE("' + mov_caixa.date +'", "%d/%m/%Y"),"%Y-%m-%d"), " ' + mov_caixa.time + '") AS DATETIME),"' + req.params.id + '","' + req.params.type + '","' + mov_caixa.paymode + '");');
+    Movimentacao_Caixa.create({
+      Movimentacao_Caixa_product: mov_caixa.product,
+      Movimentacao_Caixa_value: mov_caixa.value,
+      Movimentacao_Caixa_date: 'CAST(CONCAT(DATE_FORMAT(STR_TO_DATE("' + mov_caixa.date +'", "%d/%m/%Y"),"%Y-%m-%d"), " ' + mov_caixa.time + '") AS DATETIME)',
+      Movimentacao_Caixa_userFirebase: req.params.id,
+      Movimentacao_Caixa_Tipo_Movimentacao_id: req.params.type,
+      Movimentacao_Caixa_Paymode: mov_caixa.paymode
+    }).then(data => {
+      res.send(data);
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while creating the Tutorial."
+      });
+    });
 
-    res.send(data);
 
 };
 
