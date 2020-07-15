@@ -1,4 +1,5 @@
 const db = require("../models");
+const { sequelize } = require("../models");
 const Movimentacao_Caixa = db.movimentacao_caixa;
 const Op = db.Sequelize.Op;
 
@@ -23,7 +24,7 @@ exports.create = (req, res) => {
     Movimentacao_Caixa.create({
       Movimentacao_Caixa_product: mov_caixa.product,
       Movimentacao_Caixa_value: mov_caixa.value,
-      Movimentacao_Caixa_date: 'CAST(CONCAT(DATE_FORMAT(STR_TO_DATE("' + mov_caixa.date +'", "%d/%m/%Y"),"%Y-%m-%d"), " ' + mov_caixa.time + '") AS DATETIME)',
+      Movimentacao_Caixa_date: [sequelize.fn('cast', [sequelize.fn('concat', [sequelize.fn('date_format', [sequelize.fn('str_to_date', mov_caixa.date, '%d/%m/%Y')],'%Y-%m-%d')],' ',mov_caixa.time)], 'datetime')],
       Movimentacao_Caixa_userFirebase: req.params.id,
       Movimentacao_Caixa_Tipo_Movimentacao_id: req.params.type,
       Movimentacao_Caixa_Paymode: mov_caixa.paymode
@@ -41,7 +42,12 @@ exports.create = (req, res) => {
 };
 
 exports.findAll = (req, res) => {
-    Movimentacao_Caixa.findAll({where: {Movimentacao_Caixa_userFirebase: req.params.id, Movimentacao_Caixa_Tipo_Movimentacao_id: req.params.type} })
+    Movimentacao_Caixa.findAll(
+      { attributes: ['Movimentacao_Caixa_id', 'Movimentacao_Caixa_product', 'Movimentacao_Caixa_value', 
+      [sequelize.fn('date_format', sequelize.col('Movimentacao_Caixa_date'), '%Y-%m-%d'), 'data_formatada'],
+      [sequelize.fn('date_format', sequelize.col('Movimentacao_Caixa_date'), '%H:%i'), 'hora_formatada'],
+      'Movimentacao_Caixa_Paymode'],
+        where: {Movimentacao_Caixa_userFirebase: req.params.id, Movimentacao_Caixa_Tipo_Movimentacao_id: req.params.type} })
       .then(data => {
         res.send(data);
       })
