@@ -44,7 +44,7 @@ exports.create = (req, res) => {
 exports.findAll = (req, res) => {
     Movimentacao_Caixa.findAll(
       { attributes: ['Movimentacao_Caixa_id', 'Movimentacao_Caixa_product', 'Movimentacao_Caixa_value', 
-      [sequelize.fn('date_format', sequelize.col('Movimentacao_Caixa_date'), '%Y-%m-%d'), 'data_formatada'],
+      [sequelize.fn('date_format', sequelize.col('Movimentacao_Caixa_date'), '%d/%m/%Y'), 'data_formatada'],
       [sequelize.fn('date_format', sequelize.col('Movimentacao_Caixa_date'), '%H:%i'), 'hora_formatada'],
       'Movimentacao_Caixa_Paymode'],
         where: {Movimentacao_Caixa_userFirebase: req.params.id, Movimentacao_Caixa_Tipo_Movimentacao_id: req.params.type} })
