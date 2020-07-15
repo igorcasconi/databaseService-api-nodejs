@@ -18,7 +18,7 @@ exports.create = (req, res) => {
       product: req.body.product,
       value: req.body.value,
       paymode: req.body.paymode,
-      date: req.body.date
+      date: req.body.date.concat(' ' + req.body.time)
     };
 
 
