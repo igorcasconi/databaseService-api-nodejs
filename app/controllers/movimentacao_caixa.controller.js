@@ -41,7 +41,7 @@ exports.create = (req, res) => {
 };
 
 exports.findAll = (req, res) => {
-    Caixa_Saldo.findAll({where: {Movimentacao_Caixa_userFirebase: req.params.id, Movimentacao_Caixa_Tipo_Movimentacao_id: req.params.type} })
+    Movimentacao_Caixa.findAll({where: {Movimentacao_Caixa_userFirebase: req.params.id, Movimentacao_Caixa_Tipo_Movimentacao_id: req.params.type} })
       .then(data => {
         res.send(data);
       })
