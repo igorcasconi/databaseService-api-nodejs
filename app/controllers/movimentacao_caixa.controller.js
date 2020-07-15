@@ -18,8 +18,10 @@ exports.create = (req, res) => {
       product: req.body.product,
       value: req.body.value,
       paymode: req.body.paymode,
-      date: strToDate(req.body.date) + ' ' + req.body.time
+      date: req.body.date
     };
+
+
   
     Movimentacao_Caixa.create({
       Movimentacao_Caixa_product: mov_caixa.product,
