@@ -1,31 +1,14 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
-const { Caixa_Saldo } = require('./app/models');
+const db = require('./app/models');
 
-//configurando o body parser para pegar POSTS mais tarde
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-// app.use(express.urlencoded({ extended: false }));
-
-app.post('/register', async (req, res) => {
-    const userFirebase = req.body.userFirebase;
-    const caixa = await Caixa_Saldo.create({Caixa_Saldo_userFirebase: userFirebase});
-    res.json(caixa);
-});
-
-app.get('/saldo/:userFirebase', (req, res) => {
-    const saldo = Caixa_Saldo.findAll({
-        where: { Caixa_Saldo_userFirebase: req.params.userFirebase }
-    });
-    res.json(saldo);
-});
-
-app.get('/saldo/', (req, res) => {
-    const saldo = Caixa_Saldo.findAll();
-    res.json(saldo);
-});
+require("./app/routes/caixa_saldo.routes")(app);
+require("./app/routes/movimentacao_caixa.routes")(app);
 
 app.listen(3000);
+console.log('API funcionando!',3000);
 

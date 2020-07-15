@@ -4,16 +4,22 @@ const fs = require('fs');
 const path = require('path');
 const Sequelize = require('sequelize');
 const basename = path.basename(__filename);
-const env = process.env.NODE_ENV || 'development';
-const config = require('../../config/database.json')[env];
+// const env = process.env.NODE_ENV || 'development';
+// const dbConfig = require('../../config/database.config.js')[env];
+const dbConfig = require('../../config/database.config.js');
 const db = {};
+const sequelize = new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {
+  host: dbConfig.HOST,
+  port: dbConfig.PORT,
+  dialect: dbConfig.dialect,
 
-let sequelize;
-if (config.use_env_variable) {
-  sequelize = new Sequelize(process.env[config.use_env_variable], config);
-} else {
-  sequelize = new Sequelize(config.database, config.username, config.password, config);
-}
+  pool: {
+    max: dbConfig.pool.max,
+    min: dbConfig.pool.min,
+    acquire: dbConfig.pool.acquire,
+    idle: dbConfig.pool.idle
+  }
+});
 
 fs
   .readdirSync(__dirname)
@@ -33,5 +39,8 @@ Object.keys(db).forEach(modelName => {
 
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
+
+db.caixa_saldo = require("./caixa_saldo.js")(sequelize, Sequelize);
+db.movimentacao_caixa = require("./movimentacao_caixa.js")(sequelize, Sequelize);
 
 module.exports = db;
