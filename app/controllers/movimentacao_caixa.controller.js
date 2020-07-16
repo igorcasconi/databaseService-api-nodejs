@@ -40,27 +40,21 @@ exports.create = (req, res) => {
     });
 
     if ( req.params.type == 1) {
-      Caixa_Saldo.find({ where: { Caixa_Saldo_userFirebase: req.parms.id } })
-      .on('success', function (saldo) {
-        // Check if record exists in db
-        if (saldo) {
-          saldo.update({
-            Caixa_Saldo_value: [sequelize.literal('Caixa_Saldo_value + ' + mov_caixa.value)]
-          })
-          .success(function () {})
-        }
+      Caixa_Saldo.find({ where: { Caixa_Saldo_userFirebase: req.parms.id } },
+      {
+        Caixa_Saldo: Caixa_Saldo_value + mov_caixa.value
+      }).then(data => {
+        res.send(data);
+      })
+      .catch(err => {
+        res.status(500).send({
+          message:
+            err.message || "Some error occurred while creating the Tutorial."
+        });
       });
+      
     } else {
-      Caixa_Saldo.find({ where: { Caixa_Saldo_userFirebase: req.parms.id } })
-      .on('success', function (saldo) {
-        // Check if record exists in db
-        if (saldo) {
-          saldo.update({
-            Caixa_Saldo_value: [sequelize.literal('Caixa_Saldo_value - ' + mov_caixa.value)]
-          })
-          .success(function () {})
-        }
-      });
+      
     }
 };
 
