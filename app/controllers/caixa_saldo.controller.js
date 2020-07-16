@@ -52,7 +52,7 @@ exports.update = (req, res) => {
   };
 
   if ( req.params.type == 1) {
-    Caixa_Saldo.find({ where: { Caixa_Saldo_userFirebase: req.parms.id } },
+    Caixa_Saldo.update({ where: { Caixa_Saldo_userFirebase: req.parms.id } },
     {
       Caixa_Saldo_value: Caixa_Saldo_value + mov_caixa.value
     }).then(data => {
@@ -65,7 +65,7 @@ exports.update = (req, res) => {
       });
     });
   } else {
-    Caixa_Saldo.find({ where: { Caixa_Saldo_userFirebase: req.parms.id } },
+    Caixa_Saldo.update({ where: { Caixa_Saldo_userFirebase: req.parms.id } },
       {
         Caixa_Saldo_value: Caixa_Saldo_value - mov_caixa.value
       }).then(data => {
