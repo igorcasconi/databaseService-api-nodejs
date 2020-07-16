@@ -1,5 +1,6 @@
 const db = require("../models");
 const Caixa_Saldo = db.caixa_saldo;
+const { sequelize } = require("../models");
 const Op = db.Sequelize.Op;
 
 exports.create = (req, res) => {
@@ -47,16 +48,34 @@ exports.update = (req, res) => {
     return;
   }
 
-  Caixa_Saldo.update({ where: { Caixa_Saldo_userFirebase: req.params.id } },
-    { Caixa_Saldo_value: Caixa_Saldo_value + req.params.value_mov }).then(data => {
-      res.send(data);
-    })
-    .catch(err => {
-      res.status(500).send({
-        message:
-          err.message || "Some error occurred while creating the Tutorial."
+
+  if (req.params.type == 1 ) {
+    Caixa_Saldo.update(
+      { Caixa_Saldo_value: sequelize.literal('Caixa_Saldo_value + ' + req.body.valor) },
+      { where: { Caixa_Saldo_userFirebase: req.params.id } })
+      .then(data => {
+        res.send(data);
+      })
+      .catch(err => {
+        res.status(500).send({
+          message:
+            err.message || "Some error occurred while creating the Tutorial."
+        });
       });
-    });
+  } else {
+    Caixa_Saldo.update(
+      { Caixa_Saldo_value: sequelize.literal('Caixa_Saldo_value - ' + req.body.valor) },
+      { where: { Caixa_Saldo_userFirebase: req.params.id } })
+      .then(data => {
+        res.send(data);
+      })
+      .catch(err => {
+        res.status(500).send({
+          message:
+            err.message || "Some error occurred while creating the Tutorial."
+        });
+      });
+  }
 
 }
 
