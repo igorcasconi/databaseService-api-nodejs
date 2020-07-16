@@ -6,5 +6,7 @@ module.exports = app => {
 
     router.get("/saldo/:id", Caixa_Saldo.findAll);
 
+    router.post("/updateSaldo/:id/:type", Caixa_Saldo.updateSaldo);
+
     app.use('/api/caixa_saldo', router);
 }
