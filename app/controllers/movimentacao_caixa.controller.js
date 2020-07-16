@@ -45,7 +45,7 @@ exports.create = (req, res) => {
         // Check if record exists in db
         if (saldo) {
           saldo.update({
-            Caixa_Saldo_value: Caixa_Saldo_value + mov_caixa.value
+            Caixa_Saldo_value: [sequelize.literal('Caixa_Saldo_value + ' + mov_caixa.value)]
           })
           .success(function () {})
         }
@@ -56,7 +56,7 @@ exports.create = (req, res) => {
         // Check if record exists in db
         if (saldo) {
           saldo.update({
-            Caixa_Saldo_value: Caixa_Saldo_value - mov_caixa.value
+            Caixa_Saldo_value: [sequelize.literal('Caixa_Saldo_value - ' + mov_caixa.value)]
           })
           .success(function () {})
         }
