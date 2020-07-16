@@ -63,7 +63,7 @@ exports.findAll = (req, res) => {
 exports.movYear = (req, res) => {
   Movimentacao_Caixa.findAll(
     { attributes: [[sequelize.fn('year', sequelize.col('Movimentacao_Caixa_date')), 'ano'],
-    [sequelize.fn('sum', sequelize.col('Movimentacao_Caixa_value')), 'soma'],
+    [sequelize.fn('sum', sequelize.literal('CASE WHEN Movimentacao_Caixa_Tipo_Movimentacao_id = 1 THEN Movimentacao_Caixa_value ELSE 0 END')), 'soma'],
     ],
       where: {Movimentacao_Caixa_userFirebase: req.params.id},
       group: [[[sequelize.fn('year', sequelize.col('Movimentacao_Caixa_date'))]]], 
@@ -84,7 +84,7 @@ exports.movMonth = (req, res) => {
   Movimentacao_Caixa.findAll(
     { attributes: ['Movimentacao_Caixa_id',[sequelize.fn('monthname', sequelize.col('Movimentacao_Caixa_date')), 'mes'],
     [sequelize.fn('year', sequelize.col('Movimentacao_Caixa_date')), 'ano'],
-    [sequelize.fn('sum', sequelize.col('Movimentacao_Caixa_value')), 'soma'],
+    [sequelize.fn('sum', sequelize.literal('CASE WHEN Movimentacao_Caixa_Tipo_Movimentacao_id = 1 THEN Movimentacao_Caixa_value ELSE 0 END')), 'soma'],
     ],
       where: {Movimentacao_Caixa_userFirebase: req.params.id},
       group: [[[sequelize.fn('monthname', sequelize.col('Movimentacao_Caixa_date'))],[sequelize.fn('year', sequelize.col('Movimentacao_Caixa_date'))]]],
@@ -103,7 +103,7 @@ exports.movMonth = (req, res) => {
 exports.movDetailYear = (req, res) => {
   Movimentacao_Caixa.findAll(
     { attributes: [[sequelize.fn('year', sequelize.col('Movimentacao_Caixa_date')), 'data'],
-    [sequelize.fn('sum', sequelize.col('Movimentacao_Caixa_value')), 'soma'],
+    [sequelize.fn('sum', sequelize.literal('CASE WHEN Movimentacao_Caixa_Tipo_Movimentacao_id = 1 THEN Movimentacao_Caixa_value ELSE 0 END')), 'soma'],
     [sequelize.fn('sum',sequelize.literal('CASE WHEN Movimentacao_Caixa_Tipo_Movimentacao_id = 1 THEN 1 ELSE 0 END')), 'entrada'],
     [sequelize.fn('sum',sequelize.literal('CASE WHEN Movimentacao_Caixa_Tipo_Movimentacao_id = 2 THEN 1 ELSE 0 END')), 'saida'],
     ],
