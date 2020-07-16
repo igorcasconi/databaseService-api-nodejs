@@ -1,6 +1,7 @@
 const db = require("../models");
 const { sequelize } = require("../models");
 const Movimentacao_Caixa = db.movimentacao_caixa;
+const Caixa_Saldo = db.caixa_saldo;
 const Op = db.Sequelize.Op;
 const strToDate = require('../../config/strToDate');
 
@@ -20,8 +21,6 @@ exports.create = (req, res) => {
       paymode: req.body.paymode,
       date: req.body.date.concat(' ' + req.body.time)
     };
-
-
   
     Movimentacao_Caixa.create({
       Movimentacao_Caixa_product: mov_caixa.product,
@@ -39,6 +38,30 @@ exports.create = (req, res) => {
           err.message || "Some error occurred while creating the Tutorial."
       });
     });
+
+    if ( req.params.type == 1) {
+      Caixa_Saldo.find({ where: { Caixa_Saldo_userFirebase: req.parms.id } })
+      .on('success', function (saldo) {
+        // Check if record exists in db
+        if (saldo) {
+          saldo.update({
+            Caixa_Saldo_value: Caixa_Saldo_value + mov_caixa.value
+          })
+          .success(function () {})
+        }
+      });
+    } else {
+      Caixa_Saldo.find({ where: { Caixa_Saldo_userFirebase: req.parms.id } })
+      .on('success', function (saldo) {
+        // Check if record exists in db
+        if (saldo) {
+          saldo.update({
+            Caixa_Saldo_value: Caixa_Saldo_value - mov_caixa.value
+          })
+          .success(function () {})
+        }
+      });
+    }
 };
 
 exports.findAll = (req, res) => {
