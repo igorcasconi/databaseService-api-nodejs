@@ -38,25 +38,17 @@ exports.findAll = (req, res) => {
 };
 
 exports.update = (req, res) => {
-  
-  const mov_caixa = {
-    value: req.body.value
-  };
 
   // Validate request
-  if (!mov_caixa.value) {
+  if (!req.params.id) {
     res.status(400).send({
       message: "Content can not be empty!"
     });
     return;
   }
 
-  const mov_caixa = {
-    value: req.body.value
-  };
-    
   Caixa_Saldo.update({ where: { Caixa_Saldo_userFirebase: req.parms.id } },
-    { Caixa_Saldo_value: Caixa_Saldo_value + mov_caixa.value }).then(data => {
+    { Caixa_Saldo_value: Caixa_Saldo_value + req.params.value_mov }).then(data => {
       res.send(data);
     })
     .catch(err => {
