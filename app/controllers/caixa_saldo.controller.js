@@ -47,7 +47,7 @@ exports.update = (req, res) => {
     return;
   }
 
-  Caixa_Saldo.update({ where: { Caixa_Saldo_userFirebase: req.parms.id } },
+  Caixa_Saldo.update({ where: { Caixa_Saldo_userFirebase: req.params.id } },
     { Caixa_Saldo_value: Caixa_Saldo_value + req.params.value_mov }).then(data => {
       res.send(data);
     })
