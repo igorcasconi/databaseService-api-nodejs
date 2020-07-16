@@ -39,8 +39,12 @@ exports.findAll = (req, res) => {
 
 exports.update = (req, res) => {
   
+  const mov_caixa = {
+    value: req.body.value
+  };
+
   // Validate request
-  if (!req.body.value) {
+  if (!mov_caixa.value) {
     res.status(400).send({
       message: "Content can not be empty!"
     });
