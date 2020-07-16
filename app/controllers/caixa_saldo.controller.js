@@ -37,7 +37,7 @@ exports.findAll = (req, res) => {
     });
 };
 
-exports.updateSaldo = (req, res) => {
+exports.update = (req, res) => {
   
   // Validate request
   if (!req.body.product) {
