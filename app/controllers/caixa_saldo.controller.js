@@ -40,7 +40,7 @@ exports.findAll = (req, res) => {
 exports.update = (req, res) => {
   
   // Validate request
-  if (!req.body.product) {
+  if (!req.body.value) {
     res.status(400).send({
       message: "Content can not be empty!"
     });
@@ -50,12 +50,9 @@ exports.update = (req, res) => {
   const mov_caixa = {
     value: req.body.value
   };
-
-  if ( req.params.type == 1) {
-    Caixa_Saldo.update({ where: { Caixa_Saldo_userFirebase: req.parms.id } },
-    {
-      Caixa_Saldo_value: Caixa_Saldo_value + mov_caixa.value
-    }).then(data => {
+    
+  Caixa_Saldo.update({ where: { Caixa_Saldo_userFirebase: req.parms.id } },
+    { Caixa_Saldo_value: Caixa_Saldo_value + mov_caixa.value }).then(data => {
       res.send(data);
     })
     .catch(err => {
@@ -64,21 +61,6 @@ exports.update = (req, res) => {
           err.message || "Some error occurred while creating the Tutorial."
       });
     });
-  } else {
-    Caixa_Saldo.update({ where: { Caixa_Saldo_userFirebase: req.parms.id } },
-      {
-        Caixa_Saldo_value: Caixa_Saldo_value - mov_caixa.value
-      }).then(data => {
-        res.send(data);
-      })
-      .catch(err => {
-        res.status(500).send({
-          message:
-            err.message || "Some error occurred while creating the Tutorial."
-        });
-      });
-  }
-
 
 }
 
