@@ -83,8 +83,7 @@ exports.movYear = (req, res) => {
 
 exports.movMonth = (req, res) => {
   Movimentacao_Caixa.findAll(
-    { attributes: ['Movimentacao_Caixa_id',[sequelize.fn('monthname', sequelize.col('Movimentacao_Caixa_date')), 'mes'],
-    [sequelize.fn('year', sequelize.col('Movimentacao_Caixa_date')), 'ano'],
+    { attributes: ['Movimentacao_Caixa_id','Movimentacao_Caixa_date',
     [sequelize.fn('sum', sequelize.literal('CASE WHEN Movimentacao_Caixa_Tipo_Movimentacao_id = 1 THEN Movimentacao_Caixa_value ELSE 0 END')), 'soma'],
     ],
       where: {Movimentacao_Caixa_userFirebase: req.params.id},
@@ -103,13 +102,37 @@ exports.movMonth = (req, res) => {
 
 exports.movDetailYear = (req, res) => {
   Movimentacao_Caixa.findAll(
-    { attributes: [[sequelize.fn('year', sequelize.col('Movimentacao_Caixa_date')), 'data'],
+    { attributes: ['Movimentacao_Caixa_id',[sequelize.fn('year', sequelize.col('Movimentacao_Caixa_date')), 'data'],
     [sequelize.fn('sum', sequelize.literal('CASE WHEN Movimentacao_Caixa_Tipo_Movimentacao_id = 1 THEN Movimentacao_Caixa_value ELSE 0 END')), 'soma'],
+    [sequelize.fn('sum', sequelize.literal('CASE WHEN Movimentacao_Caixa_Tipo_Movimentacao_id = 2 THEN Movimentacao_Caixa_value ELSE 0 END')), 'gastos'],
     [sequelize.fn('sum',sequelize.literal('CASE WHEN Movimentacao_Caixa_Tipo_Movimentacao_id = 1 THEN 1 ELSE 0 END')), 'entrada'],
     [sequelize.fn('sum',sequelize.literal('CASE WHEN Movimentacao_Caixa_Tipo_Movimentacao_id = 2 THEN 1 ELSE 0 END')), 'saida'],
     ],
       where: { [Op.and]: [ sequelize.where(sequelize.fn('year', sequelize.col('Movimentacao_Caixa_date')), req.params.year), {Movimentacao_Caixa_userFirebase: req.params.id} ] },
-      group: [[sequelize.fn('year', sequelize.col('Movimentacao_Caixa_date'))]]})
+      group: [[sequelize.fn('year', sequelize.col('Movimentacao_Caixa_date'))]]}
+      )
+    .then(data => {
+      res.send(data);
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving."
+      });
+  });
+};
+
+exports.movDetailMonth = (req, res) => {
+  Movimentacao_Caixa.findAll(
+    { attributes: [[sequelize.fn('concat',sequelize.literal('monthname(Movimentacao_Caixa_date),'+ '"/"' +',year(Movimentacao_Caixa_date)')), 'data'],
+    [sequelize.fn('sum', sequelize.literal('CASE WHEN Movimentacao_Caixa_Tipo_Movimentacao_id = 1 THEN Movimentacao_Caixa_value ELSE 0 END')), 'soma'],
+    [sequelize.fn('sum', sequelize.literal('CASE WHEN Movimentacao_Caixa_Tipo_Movimentacao_id = 2 THEN Movimentacao_Caixa_value ELSE 0 END')), 'gastos'],
+    [sequelize.fn('sum',sequelize.literal('CASE WHEN Movimentacao_Caixa_Tipo_Movimentacao_id = 1 THEN 1 ELSE 0 END')), 'entrada'],
+    [sequelize.fn('sum',sequelize.literal('CASE WHEN Movimentacao_Caixa_Tipo_Movimentacao_id = 2 THEN 1 ELSE 0 END')), 'saida'],
+    ],
+      where: { [Op.and]: [ sequelize.where(sequelize.fn('year', sequelize.col('Movimentacao_Caixa_date')), req.params.year), sequelize.where(sequelize.fn('monthname', sequelize.col('Movimentacao_Caixa_date')), req.params.month),
+      {Movimentacao_Caixa_userFirebase: req.params.id}] },
+      group: [[[sequelize.fn('monthname', sequelize.col('Movimentacao_Caixa_date'))],[sequelize.fn('year', sequelize.col('Movimentacao_Caixa_date'))]]]})
     .then(data => {
       res.send(data);
     })
