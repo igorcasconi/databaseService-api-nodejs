@@ -18,13 +18,14 @@ exports.create = (req, res) => {
       product: req.body.product,
       value: req.body.value,
       paymode: req.body.paymode,
-      date: req.body.date.concat(' ' + req.body.time)
+      date: req.body.date,
+      time: req.body.time
     };
   
     Movimentacao_Caixa.create({
       Movimentacao_Caixa_product: mov_caixa.product,
       Movimentacao_Caixa_value: mov_caixa.value,
-      Movimentacao_Caixa_date: mov_caixa.date,
+      Movimentacao_Caixa_date: sequelize.literal('CAST(CONCAT(DATE_FORMAT(STR_TO_DATE("' + mov_caixa.date +'", "%d/%m/%Y"),"%Y-%m-%d"), " ' + mov_caixa.time + '") AS DATETIME)'),
       Movimentacao_Caixa_userFirebase: req.params.id,
       Movimentacao_Caixa_Tipo_Movimentacao_id: req.params.type,
       Movimentacao_Caixa_Paymode: mov_caixa.paymode
