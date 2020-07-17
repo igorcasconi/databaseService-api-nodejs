@@ -14,5 +14,7 @@ module.exports = app => {
 
     router.get("/movs-detail-month/:id/:month/:year", Movimentacao_Caixa.movDetailMonth);
 
+    router.post("/movs-delete/:id", Movimentacao_Caixa.movDelete);
+
     app.use('/api/movimentacao_caixa', router);
 }
