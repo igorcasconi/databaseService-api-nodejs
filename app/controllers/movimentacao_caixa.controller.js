@@ -145,12 +145,22 @@ exports.movDetailMonth = (req, res) => {
 };
 
 exports.movDelete = (req, res) => {
+
+  if (!req.body.id) {
+    res.status(400).send({
+      message: "Content can not be empty!"
+    });
+    return;
+  }
+
   Movimentacao_Caixa.destroy({
-    where: {Movimentacao_Caixa_id: req.params.id }
-  }).then(data => { res.send(data) })
+    where: {Movimentacao_Caixa_id: req.body.id }
+  })
+  .then(data => { res.send(data) })
   .catch(err => {
     res.status(500).send({
-    message:
-      err.message || "Some error occurred while retrieving."
-  });})
+      message:
+        err.message || "Some error occurred while retrieving."
+    });
+  })
 }

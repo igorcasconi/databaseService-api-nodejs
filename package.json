@@ -4,7 +4,8 @@
   "description": "api conexão mysql",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js",
+
   },
   "author": "igorcasconi",
   "license": "ISC",
