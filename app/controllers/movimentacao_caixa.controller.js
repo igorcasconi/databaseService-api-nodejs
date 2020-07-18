@@ -146,7 +146,7 @@ exports.movDetailMonth = (req, res) => {
 
 exports.movDelete = (req, res) => {
   Movimentacao_Caixa.destroy({
-    Movimentacao_Caixa_id: req.params.id
+    where: {Movimentacao_Caixa_id: req.params.id }
   }).then(data => { res.send(data) })
   .catch(err => {
     res.status(500).send({
