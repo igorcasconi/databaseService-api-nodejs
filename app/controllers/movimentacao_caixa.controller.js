@@ -158,9 +158,6 @@ exports.movDelete = (req, res) => {
   })
   .then(data => { res.send(data) })
   .catch(err => {
-    res.status(500).send({
-      message:
-        err.message || "Some error occurred while retrieving."
-    });
+    res.status(err.status >= 100 && err.status < 600 ? err.code : 500).send(err.message);
   })
 }
