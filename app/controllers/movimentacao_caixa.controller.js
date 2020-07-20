@@ -103,7 +103,7 @@ exports.movMonth = (req, res) => {
 exports.movDetailYear = (req, res) => {
   Movimentacao_Caixa.findAll(
     { attributes: ['Movimentacao_Caixa_id',[sequelize.fn('year', sequelize.col('Movimentacao_Caixa_date')), 'data'],
-    [sequelize.fn('sum', sequelize.literal('CASE WHEN Movimentacao_Caixa_Tipo_Movimentacao_id = 1 THEN Movimentacao_Caixa_value ELSE 0 END')), 'soma'],
+    [sequelize.literal('SUM(CASE WHEN Movimentacao_Caixa_Tipo_Movimentacao_id = 1 THEN Movimentacao_Caixa_value ELSE 0 END) - SUM(CASE WHEN Movimentacao_Caixa_Tipo_Movimentacao_id = 2 THEN Movimentacao_Caixa_value ELSE 0 END)'), 'soma'],
     [sequelize.fn('sum', sequelize.literal('CASE WHEN Movimentacao_Caixa_Tipo_Movimentacao_id = 2 THEN Movimentacao_Caixa_value ELSE 0 END')), 'gastos'],
     [sequelize.fn('sum',sequelize.literal('CASE WHEN Movimentacao_Caixa_Tipo_Movimentacao_id = 1 THEN 1 ELSE 0 END')), 'entrada'],
     [sequelize.fn('sum',sequelize.literal('CASE WHEN Movimentacao_Caixa_Tipo_Movimentacao_id = 2 THEN 1 ELSE 0 END')), 'saida'],
@@ -125,7 +125,7 @@ exports.movDetailYear = (req, res) => {
 exports.movDetailMonth = (req, res) => {
   Movimentacao_Caixa.findAll(
     { attributes: [[sequelize.fn('concat',sequelize.literal('monthname(Movimentacao_Caixa_date),'+ '"/"' +',year(Movimentacao_Caixa_date)')), 'data'],
-    [sequelize.fn('sum', sequelize.literal('CASE WHEN Movimentacao_Caixa_Tipo_Movimentacao_id = 1 THEN Movimentacao_Caixa_value ELSE 0 END')), 'soma'],
+    [sequelize.literal('CASE WHEN Movimentacao_Caixa_Tipo_Movimentacao_id = 1 THEN Movimentacao_Caixa_value ELSE 0 END) - SUM(CASE WHEN Movimentacao_Caixa_Tipo_Movimentacao_id = 2 THEN Movimentacao_Caixa_value ELSE 0 END)'), 'soma'],
     [sequelize.fn('sum', sequelize.literal('CASE WHEN Movimentacao_Caixa_Tipo_Movimentacao_id = 2 THEN Movimentacao_Caixa_value ELSE 0 END')), 'gastos'],
     [sequelize.fn('sum',sequelize.literal('CASE WHEN Movimentacao_Caixa_Tipo_Movimentacao_id = 1 THEN 1 ELSE 0 END')), 'entrada'],
     [sequelize.fn('sum',sequelize.literal('CASE WHEN Movimentacao_Caixa_Tipo_Movimentacao_id = 2 THEN 1 ELSE 0 END')), 'saida'],
