@@ -79,3 +79,18 @@ exports.update = (req, res) => {
 
 }
 
+exports.updateSlideInitial = (req, res) => {
+  Caixa_Saldo.update(
+    { Caixa_Saldo_value: 1 },
+    { where: { Caixa_Saldo_userFirebase: req.params.id } })
+    .then(data => {
+      res.send(data);
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while creating the Tutorial."
+      });
+  });
+}
+

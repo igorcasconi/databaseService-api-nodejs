@@ -8,5 +8,7 @@ module.exports = app => {
 
     router.post("/updatesaldo/:id/:type", Caixa_Saldo.update);
 
+    router.post("/update-init/:id", Caixa_Saldo.updateSlideInitial);
+
     app.use('/api/caixa_saldo', router);
 }
