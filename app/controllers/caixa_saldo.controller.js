@@ -26,7 +26,7 @@ exports.create = (req, res) => {
 };
 
 exports.findAll = (req, res) => {
-    Caixa_Saldo.findAll({where: {Caixa_Saldo_userFirebase: req.params.id} })
+    Caixa_Saldo.findOne({where: {Caixa_Saldo_userFirebase: req.params.id} })
       .then(data => {
         res.send(data);
       })
