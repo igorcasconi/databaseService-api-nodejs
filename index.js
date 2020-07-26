@@ -8,7 +8,6 @@ app.use(bodyParser.json());
 
 require("./app/routes/caixa_saldo.routes")(app);
 require("./app/routes/movimentacao_caixa.routes")(app);
-require("./app/routes/usuario_caixa.routes")(app);
 
 app.listen(3000);
 console.log('API funcionando!',3000);
