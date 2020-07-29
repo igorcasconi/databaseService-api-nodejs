@@ -24,7 +24,7 @@ exports.create = (req, res) => {
   
     Movimentacao_Caixa.create({
       Movimentacao_Caixa_product: mov_caixa.product,
-      Movimentacao_Caixa_value: mov_caixa.value,
+      Movimentacao_Caixa_value: sequelize.literal('CAST(REPLACE(' + mov_caixa.value + ', ",", ".") AS DOUBLE)'),
       Movimentacao_Caixa_date: sequelize.literal('CAST(CONCAT(DATE_FORMAT(STR_TO_DATE("' + mov_caixa.date +'", "%d/%m/%Y"),"%Y-%m-%d"), " ' + mov_caixa.time + '") AS DATETIME)'),
       Movimentacao_Caixa_userFirebase: req.params.id,
       Movimentacao_Caixa_Tipo_Movimentacao_id: req.params.type,
