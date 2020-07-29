@@ -51,7 +51,7 @@ exports.update = (req, res) => {
 
   if (req.params.type == 1 ) {
     Caixa_Saldo.update(
-      { Caixa_Saldo_value: sequelize.literal('Caixa_Saldo_value + ' + 'CAST(REPLACE(' + req.body.valor + ', ",", ".") AS DOUBLE)') },
+      { Caixa_Saldo_value: sequelize.literal('Caixa_Saldo_value + ' + 'CAST(REPLACE("' + req.body.valor + '", ",", ".") AS DOUBLE)') },
       { where: { Caixa_Saldo_userFirebase: req.params.id } })
       .then(data => {
         res.send(data);
@@ -64,7 +64,7 @@ exports.update = (req, res) => {
       });
   } else {
     Caixa_Saldo.update(
-      { Caixa_Saldo_value: sequelize.literal('Caixa_Saldo_value - ' + 'CAST(REPLACE(' + req.body.valor + ', ",", ".") AS DOUBLE)') },
+      { Caixa_Saldo_value: sequelize.literal('Caixa_Saldo_value - ' + 'CAST(REPLACE("' + req.body.valor + '", ",", ".") AS DOUBLE)') },
       { where: { Caixa_Saldo_userFirebase: req.params.id } })
       .then(data => {
         res.send(data);
