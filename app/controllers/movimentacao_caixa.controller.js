@@ -63,7 +63,7 @@ exports.findAll = (req, res) => {
 
 exports.movYear = (req, res) => {
   Movimentacao_Caixa.findAll(
-    { attributes: [[sequelize.fn('year', sequelize.col('Movimentacao_Caixa_date')), 'ano'],
+    { attributes: [[sequelize.fn('year', sequelize.col('Movimentacao_Caixa_date')), 'date'],
     [sequelize.literal('SUM(CASE WHEN Movimentacao_Caixa_Tipo_Movimentacao_id = 1 THEN Movimentacao_Caixa_value ELSE 0 END) - SUM(CASE WHEN Movimentacao_Caixa_Tipo_Movimentacao_id = 2 THEN Movimentacao_Caixa_value ELSE 0 END)'), 'soma'],
     ],
       where: {Movimentacao_Caixa_userFirebase: req.params.id},
@@ -83,7 +83,7 @@ exports.movYear = (req, res) => {
 
 exports.movMonth = (req, res) => {
   Movimentacao_Caixa.findAll(
-    { attributes: ['Movimentacao_Caixa_id','Movimentacao_Caixa_date',
+    { attributes: ['Movimentacao_Caixa_id',['Movimentacao_Caixa_date', 'date'],
     [sequelize.literal('SUM(CASE WHEN Movimentacao_Caixa_Tipo_Movimentacao_id = 1 THEN Movimentacao_Caixa_value ELSE 0 END) - SUM(CASE WHEN Movimentacao_Caixa_Tipo_Movimentacao_id = 2 THEN Movimentacao_Caixa_value ELSE 0 END)'), 'soma'],
     ],
       where: {Movimentacao_Caixa_userFirebase: req.params.id},
