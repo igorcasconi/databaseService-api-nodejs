@@ -16,5 +16,7 @@ module.exports = app => {
 
     router.post("/movs-delete/", Movimentacao_Caixa.movDelete);
 
+    router.get("/saldo/:id", Movimentacao_Caixa.calcSaldo);
+
     app.use('/api/movimentacao_caixa', router);
 }

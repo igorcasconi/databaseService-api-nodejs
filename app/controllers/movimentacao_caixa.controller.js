@@ -164,3 +164,19 @@ exports.movDelete = (req, res) => {
     });
   });
 }
+
+exports.calcSaldo = (req, res) => {
+  Movimentacao_Caixa.findAll(
+    { attributes: [[sequelize.literal('SUM(CASE WHEN Movimentacao_Caixa_Tipo_Movimentacao_id = 1 THEN Movimentacao_Caixa_value ELSE 0 END) - SUM(CASE WHEN Movimentacao_Caixa_Tipo_Movimentacao_id = 2 THEN Movimentacao_Caixa_value ELSE 0 END)'), 'saldo'],
+    ],
+      where: {Movimentacao_Caixa_userFirebase: req.params.id}})
+    .then(data => {
+      res.send(data);
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving."
+      });
+  });
+};
