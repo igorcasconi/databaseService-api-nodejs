@@ -166,7 +166,7 @@ exports.movDelete = (req, res) => {
 }
 
 exports.calcSaldo = (req, res) => {
-  Movimentacao_Caixa.findAll(
+  Movimentacao_Caixa.findOne(
     { attributes: [[sequelize.literal('SUM(CASE WHEN Movimentacao_Caixa_Tipo_Movimentacao_id = 1 THEN Movimentacao_Caixa_value ELSE 0 END) - SUM(CASE WHEN Movimentacao_Caixa_Tipo_Movimentacao_id = 2 THEN Movimentacao_Caixa_value ELSE 0 END)'), 'saldo'],
     ],
       where: {Movimentacao_Caixa_userFirebase: req.params.id}})
