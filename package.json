@@ -4,7 +4,7 @@
   "description": "api conexão mysql",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "nodemon index.js"
   },
   "author": "igorcasconi",
   "license": "ISC",
@@ -16,6 +16,7 @@
     "sequelize": "^6.3.3"
   },
   "devDependencies": {
+    "nodemon": "^2.0.10",
     "sequelize-cli": "^6.2.0"
   }
 }
