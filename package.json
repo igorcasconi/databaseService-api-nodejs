@@ -4,19 +4,24 @@
   "description": "api conexão mysql",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon --inspect index.js"
+    "start": "babel-node -r dotenv/config index.js",
+    "dev": "nodemon --exec babel-node -r dotenv/config index.js"
   },
   "author": "igorcasconi",
   "license": "ISC",
   "dependencies": {
+    "@babel/core": "^7.14.6",
+    "@babel/node": "^7.14.7",
+    "@babel/plugin-proposal-class-properties": "^7.14.5",
+    "@babel/preset-env": "^7.14.7",
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
+    "dotenv": "^10.0.0",
     "express": "^4.17.1",
-    "mysql2": "^2.2.5",
-    "sequelize": "^6.3.3"
+    "knex": "^0.95.7",
+    "mysql2": "^2.2.5"
   },
   "devDependencies": {
-    "nodemon": "^2.0.10",
-    "sequelize-cli": "^6.2.0"
+    "nodemon": "^2.0.10"
   }
 }

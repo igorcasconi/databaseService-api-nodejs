@@ -1,14 +1,25 @@
-const express = require('express');
-const bodyParser = require('body-parser');
+import dotenv from "dotenv";
+import express from "express";
+import cors from "cors";
+import bodyParser from "body-parser";
+import routes from "./app/routes";
+
+dotenv.config({ path: ".env" });
 const app = express();
-const db = require('./app/models');
+const port = process.env.PORT || 5000;
+const host = "0.0.0.0";
 
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(
+  bodyParser.urlencoded({
+    extended: true,
+  })
+);
 app.use(bodyParser.json());
+app.use(cors());
+app.use(express.json());
+app.use(routes);
+app.set("keySecret", process.env.PRIVATE_KEY);
 
-require("./app/routes/caixa_saldo.routes")(app);
-require("./app/routes/movimentacao_caixa.routes")(app);
-
-app.listen(3000);
-console.log('API funcionando!',3000);
-
+app.listen(port, host, () => {
+  console.log("Aplicação rodando na porta 5000");
+});
