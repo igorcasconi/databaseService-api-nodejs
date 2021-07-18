@@ -309,8 +309,7 @@ export default class MovimentacaoCaixaController {
         balance: db.raw(
           "SUM(CASE WHEN Movimentacao_Caixa_Tipo_Movimentacao_id = 1 THEN Movimentacao_Caixa_value ELSE 0 END) - SUM(CASE WHEN Movimentacao_Caixa_Tipo_Movimentacao_id = 2 THEN Movimentacao_Caixa_value ELSE 0 END)"
         ),
-      });
-      where({ Movimentacao_Caixa_userFirebase: id });
+      }).where({ Movimentacao_Caixa_userFirebase: id });
       return res.status(200).json({ data: query });
     } catch (err) {
       return res.status(500).json({
