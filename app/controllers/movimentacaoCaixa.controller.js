@@ -2,13 +2,8 @@ import db from "../database/connection";
 
 export default class MovimentacaoCaixaController {
   async create(req, res) {
-    const { id, product, value, paymode, date, time } = req.body;
-
-    if (!id) {
-      return res.status(400).send({
-        message: "Necessário o userFirebaseID para realizar a criação",
-      });
-    }
+    const { id, type } = req.params;
+    const { product, value, paymode, date, time } = req.body;
 
     const mov_caixa = {
       product,
@@ -26,8 +21,8 @@ export default class MovimentacaoCaixaController {
           'CAST(CONCAT(DATE_FORMAT(STR_TO_DATE("??", "%d/%m/%Y"),"%Y-%m-%d"),"??") AS DATETIME)',
           [mov_caixa.date, mov_caixa.time]
         ),
-        Movimentacao_Caixa_userFirebase: req.params.id,
-        Movimentacao_Caixa_Tipo_Movimentacao_id: req.params.type,
+        Movimentacao_Caixa_userFirebase: id,
+        Movimentacao_Caixa_Tipo_Movimentacao_id: type,
         Movimentacao_Caixa_Paymode: mov_caixa.paymode,
       });
     } catch (err) {
