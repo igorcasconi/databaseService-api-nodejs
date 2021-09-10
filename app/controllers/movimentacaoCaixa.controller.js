@@ -25,6 +25,10 @@ export default class MovimentacaoCaixaController {
         Movimentacao_Caixa_Tipo_Movimentacao_id: type,
         Movimentacao_Caixa_Paymode: mov_caixa.paymode,
       });
+
+      return res.status(200).json({
+        success: true,
+      });
     } catch (err) {
       return res.status(500).json({
         errorMessage: "Ocorreu um erro ao processar a criação da movimentação",
