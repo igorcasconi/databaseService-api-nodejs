@@ -15,25 +15,21 @@ router.get(
   MovimentacaoCaixa.FinancialMovement
 );
 router.get(
-  "/financial-movement-by-year/:id",
-  MovimentacaoCaixa.financialMovementByYear
-);
-router.get(
-  "/financial-movement-detail-year/:id/:year",
-  MovimentacaoCaixa.financialMovementDetailYear
-);
-router.get(
-  "/financial-movement-by-month/:id",
-  MovimentacaoCaixa.financialMovementByMonth
-);
-router.get(
-  "/financial-movement-detail-month/:id/:month/:year",
-  MovimentacaoCaixa.financialMovementDetailMonth
+  "/financial-movement-detail/:id/:year/:month?",
+  MovimentacaoCaixa.financialMovementDetail
 );
 router.delete(
   "/financial-movement-delete/",
-  MovimentacaoCaixa.financialMovementDelete
+  MovimentacaoCaixa.deleteFinancialMovement
 );
 router.get("/financial-balance/:id", MovimentacaoCaixa.financialBalance);
+router.get(
+  "/financial-report-list/:id/:type",
+  MovimentacaoCaixa.financialMovementReportList
+);
+router.get(
+  "/financial-report-list-doc/:id/:year?/:month?",
+  MovimentacaoCaixa.financialMovementReportDetailList
+);
 
 export default router;

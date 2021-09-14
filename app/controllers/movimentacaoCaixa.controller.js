@@ -1,9 +1,15 @@
-import db from "../database/connection";
+import { parseISO, format } from "date-fns";
+import { utcToZonedTime } from "date-fns-tz";
 
+import db from "../database/connection";
 export default class MovimentacaoCaixaController {
   async create(req, res) {
     const { id, type } = req.params;
     const { product, value, paymode, date, time } = req.body;
+
+    const datetime = parseISO(
+      `${format(new Date(date), "yyyy-dd-MM")}T${time}:00`
+    );
 
     const mov_caixa = {
       product,
@@ -11,16 +17,14 @@ export default class MovimentacaoCaixaController {
       paymode,
       date,
       time,
+      datetime,
     };
 
     try {
       await db.from("Movimentacao_Caixas").insert({
         Movimentacao_Caixa_product: mov_caixa.product,
         Movimentacao_Caixa_value: mov_caixa.value,
-        Movimentacao_Caixa_date: db.raw(
-          'CAST(CONCAT(DATE_FORMAT(STR_TO_DATE("??", "%d/%m/%Y"),"%Y-%m-%d"),"??") AS DATETIME)',
-          [mov_caixa.date, mov_caixa.time]
-        ),
+        Movimentacao_Caixa_date: mov_caixa.datetime,
         Movimentacao_Caixa_userFirebase: id,
         Movimentacao_Caixa_Tipo_Movimentacao_id: type,
         Movimentacao_Caixa_Paymode: mov_caixa.paymode,
@@ -38,23 +42,6 @@ export default class MovimentacaoCaixaController {
 
   async FinancialMovement(req, res) {
     const { id, type } = req.params;
-    const { page } = req.query;
-    const currentPage = parseInt(page) || 1;
-
-    const queryTotalRows = await db
-      .from("Movimentacao_Caixas")
-      .count("Movimentacao_Caixa_id", { as: "total" })
-      .where({
-        Movimentacao_Caixa_userFirebase: id,
-        Movimentacao_Caixa_Tipo_Movimentacao_id: type,
-      });
-
-    if (queryTotalRows <= 0)
-      return res.status(200).json({ message: "Não possui movimentações" });
-
-    const totalRows = queryTotalRows[0].total;
-    const calcTotalPages = Math.ceil(totalRows / 10);
-    const countItems = currentPage * 10 - 10;
 
     try {
       const query = await db
@@ -70,15 +57,10 @@ export default class MovimentacaoCaixaController {
           Movimentacao_Caixa_userFirebase: id,
           Movimentacao_Caixa_Tipo_Movimentacao_id: type,
         })
-        .orderBy("Movimentacao_Caixa_date", "desc")
-        .limit(10)
-        .offset(countItems);
+        .orderBy("Movimentacao_Caixa_date", "desc");
 
       return res.status(200).json({
         data: query,
-        totalPages: calcTotalPages,
-        total: totalRows,
-        page: currentPage,
       });
     } catch (err) {
       return res.status(500).json({
@@ -88,83 +70,14 @@ export default class MovimentacaoCaixaController {
     }
   }
 
-  async financialMovementByYear(req, res) {
-    const { id } = req.params;
-    const { page } = req.query;
-    const currentPage = parseInt(page) || 1;
-
-    const queryTotalRows = await db
-      .from("Movimentacao_Caixas")
-      .count("Movimentacao_Caixa_date")
-      .where({
-        Movimentacao_Caixa_userFirebase: id,
-      })
-      .groupByRaw("YEAR(Movimentacao_Caixa_Date)");
-
-    if (queryTotalRows <= 0)
-      return res.status(200).json({ message: "Não possui movimentações" });
-
-    const totalRows = queryTotalRows.length;
-    const calcTotalPages = Math.ceil(totalRows / 10);
-    const countItems = currentPage * 10 - 10;
+  async financialMovementReportList(req, res) {
+    const { id, type } = req.params;
 
     try {
       const query = await db
         .from("Movimentacao_Caixas")
         .select(
-          { year: db.raw("YEAR(Movimentacao_Caixa_date)") },
-          {
-            balance: db.raw(
-              `SUM(CASE WHEN Movimentacao_Caixa_Tipo_Movimentacao_id = 1 THEN Movimentacao_Caixa_value ELSE 0 END) - SUM(CASE WHEN Movimentacao_Caixa_Tipo_Movimentacao_id = 2 THEN Movimentacao_Caixa_value ELSE 0 END)`
-            ),
-          }
-        )
-        .where({ Movimentacao_Caixa_userFirebase: id })
-        .groupByRaw("YEAR(Movimentacao_Caixa_Date)")
-        .orderBy("Movimentacao_Caixa_date", "desc")
-        .limit(10)
-        .offset(countItems);
-
-      return res.status(200).json({
-        data: query,
-        totalPages: calcTotalPages,
-        total: totalRows,
-        page: currentPage,
-      });
-    } catch (err) {
-      res.status(500).json({
-        message: err.message || "Some error occurred while retrieving.",
-      });
-    }
-  }
-
-  async financialMovementByMonth(req, res) {
-    const { id } = req.params;
-    const { page } = req.query;
-    const currentPage = parseInt(page) || 1;
-
-    const queryTotalRows = await db
-      .from("Movimentacao_Caixas")
-      .count("Movimentacao_Caixa_date")
-      .where({
-        Movimentacao_Caixa_userFirebase: id,
-      })
-      .groupByRaw(
-        "YEAR(Movimentacao_Caixa_Date), MONTHNAME(Movimentacao_Caixa_Date)"
-      );
-
-    if (queryTotalRows <= 0)
-      return res.status(200).json({ message: "Não possui movimentações" });
-
-    const totalRows = queryTotalRows.length;
-    const calcTotalPages = Math.ceil(totalRows / 10);
-    const countItems = currentPage * 10 - 10;
-
-    try {
-      const query = await db
-        .from("Movimentacao_Caixas")
-        .select(
-          { date: db.raw("Movimentacao_Caixa_date") },
+          { date: "Movimentacao_Caixa_date" },
           { id: "Movimentacao_Caixa_id" },
           {
             balance: db.raw(
@@ -174,18 +87,14 @@ export default class MovimentacaoCaixaController {
         )
         .where({ Movimentacao_Caixa_userFirebase: id })
         .groupByRaw(
-          "YEAR(Movimentacao_Caixa_Date), MONTHNAME(Movimentacao_Caixa_Date)"
+          `YEAR(Movimentacao_Caixa_Date)${
+            type === "month" ? ",MONTHNAME(Movimentacao_Caixa_Date)" : ""
+          }`
         )
-        .orderBy("Movimentacao_Caixa_date", "desc")
-        .limit(10)
-        .offset(countItems)
-        .debug();
+        .orderBy("Movimentacao_Caixa_date", "desc");
 
       return res.status(200).json({
         data: query,
-        totalPages: calcTotalPages,
-        total: totalRows,
-        page: currentPage,
       });
     } catch (err) {
       res.status(500).json({
@@ -194,46 +103,7 @@ export default class MovimentacaoCaixaController {
     }
   }
 
-  async financialMovementDetailYear(req, res) {
-    const { id, year } = req.params;
-    try {
-      const query = await db
-        .from("Movimentacao_Caixas")
-        .select(
-          {
-            cashTotal: db.raw(
-              "SUM(CASE WHEN Movimentacao_Caixa_Tipo_Movimentacao_id = 1 THEN Movimentacao_Caixa_value ELSE 0 END) - SUM(CASE WHEN Movimentacao_Caixa_Tipo_Movimentacao_id = 2 THEN Movimentacao_Caixa_value ELSE 0 END)"
-            ),
-          },
-          {
-            expenses: db.raw(
-              "SUM(CASE WHEN Movimentacao_Caixa_Tipo_Movimentacao_id = 2 THEN Movimentacao_Caixa_value ELSE 0 END)"
-            ),
-          },
-          {
-            entries: db.raw(
-              "SUM(CASE WHEN Movimentacao_Caixa_Tipo_Movimentacao_id = 1 THEN 1 ELSE 0 END)"
-            ),
-          },
-          {
-            outflows: db.raw(
-              "SUM(CASE WHEN Movimentacao_Caixa_Tipo_Movimentacao_id = 2 THEN 1 ELSE 0 END)"
-            ),
-          }
-        )
-        .where({ Movimentacao_Caixa_userFirebase: id })
-        .whereRaw(`YEAR(Movimentacao_Caixa_date) = "${year}"`)
-        .groupByRaw("YEAR(Movimentacao_Caixa_Date)");
-
-      !!query[0] && res.status(200).json({ data: { ...query[0], year } });
-    } catch (err) {
-      return res.status(500).json({
-        message: err.message || "Some error occurred while retrieving.",
-      });
-    }
-  }
-
-  async financialMovementDetailMonth(req, res) {
+  async financialMovementDetail(req, res) {
     const { id, year, month } = req.params;
     try {
       const query = await db
@@ -263,10 +133,13 @@ export default class MovimentacaoCaixaController {
         )
         .where({ Movimentacao_Caixa_userFirebase: id })
         .whereRaw(`YEAR(Movimentacao_Caixa_date) = "${year}"`)
-        .whereRaw(`MONTHNAME(Movimentacao_Caixa_date) = "${month}"`)
+        .whereRaw(
+          `${!!month ? `MONTHNAME(Movimentacao_Caixa_date) = "${month}"` : ""}`
+        )
         .groupByRaw(
           "YEAR(Movimentacao_Caixa_Date), MONTHNAME(Movimentacao_Caixa_Date)"
-        );
+        )
+        .debug();
 
       !query[0] && res.status(200).json({ message: "No data!" });
 
@@ -278,21 +151,34 @@ export default class MovimentacaoCaixaController {
     }
   }
 
-  async financialMovementDelete(req, res) {
-    const { id } = req.body;
-
-    if (!id) {
-      return res.status(400).send({
-        message: "Content can not be empty!",
-      });
-    }
+  async financialMovementReportDetailList(req, res) {
+    const { id, year, month } = req.params;
     try {
-      await db
+      const query = await db
         .from("Movimentacao_Caixas")
-        .where({ Movimentacao_Caixa_id: id })
-        .del();
+        .select(
+          { id: "Movimentacao_Caixa_id" },
+          { product: "Movimentacao_Caixa_product" },
+          { value: "Movimentacao_Caixa_value" },
+          { payMode: "Movimentacao_Caixa_Paymode" },
+          { date: "Movimentacao_Caixa_date" },
+          {
+            type: db.raw(
+              "CASE WHEN Movimentacao_Caixa_Tipo_Movimentacao_id = 1 THEN 'Entrada' ELSE 'Saída' END"
+            ),
+          }
+        )
+        .where({ Movimentacao_Caixa_userFirebase: id })
+        .whereRaw(
+          `${!!year ? `YEAR(Movimentacao_Caixa_date) = "${year}"` : ""}`
+        )
+        .whereRaw(
+          `${!!month ? `MONTHNAME(Movimentacao_Caixa_date) = "${month}"` : ""}`
+        );
 
-      return res.status(200).json({ success: true });
+      !query && res.status(200).json({ message: "No data!" });
+
+      return res.status(200).json({ data: query });
     } catch (err) {
       return res.status(500).json({
         message: err.message || "Some error occurred while retrieving.",
@@ -312,6 +198,23 @@ export default class MovimentacaoCaixaController {
         })
         .where({ Movimentacao_Caixa_userFirebase: id });
       return res.status(200).json({ data: query });
+    } catch (err) {
+      return res.status(500).json({
+        message: err.message || "Some error occurred while retrieving.",
+      });
+    }
+  }
+
+  async deleteFinancialMovement(req, res) {
+    const { id, idMovement } = req.params;
+
+    try {
+      await db
+        .from("Movimentacao_Caixas")
+        .where("Movimentacao_Caixa_id", idMovement)
+        .where("Movimentacao_Caixa_userFirebase", id)
+        .del();
+      return res.status(200).json({ success: true });
     } catch (err) {
       return res.status(500).json({
         message: err.message || "Some error occurred while retrieving.",
