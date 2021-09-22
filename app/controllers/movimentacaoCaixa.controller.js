@@ -157,13 +157,12 @@ export default class MovimentacaoCaixaController {
       const query = await db
         .from("Movimentacao_Caixas")
         .select(
-          { id: "Movimentacao_Caixa_id" },
-          { product: "Movimentacao_Caixa_product" },
-          { value: "Movimentacao_Caixa_value" },
-          { payMode: "Movimentacao_Caixa_Paymode" },
-          { date: "Movimentacao_Caixa_date" },
+          { Descrição: "Movimentacao_Caixa_product" },
+          { Valor: "Movimentacao_Caixa_value" },
+          { "Tipo de pagamento": "Movimentacao_Caixa_Paymode" },
+          { Data: db.raw("DATE_FORMAT(Movimentacao_Caixa_Date, '%d/%m/%Y')") },
           {
-            type: db.raw(
+            "Tipo da movimentação": db.raw(
               "CASE WHEN Movimentacao_Caixa_Tipo_Movimentacao_id = 1 THEN 'Entrada' ELSE 'Saída' END"
             ),
           }
