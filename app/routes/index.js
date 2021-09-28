@@ -19,7 +19,7 @@ router.get(
   MovimentacaoCaixa.financialMovementDetail
 );
 router.delete(
-  "/financial-movement-delete/",
+  "/financial-movement-delete/:id/:idMovement",
   MovimentacaoCaixa.deleteFinancialMovement
 );
 router.get("/financial-balance/:id", MovimentacaoCaixa.financialBalance);
