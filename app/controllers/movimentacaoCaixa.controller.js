@@ -7,9 +7,7 @@ export default class MovimentacaoCaixaController {
     const { id, type } = req.params;
     const { product, value, paymode, date, time } = req.body;
 
-    const datetime = parseISO(
-      `${format(new Date(date), "yyyy-dd-MM")}T${time}:00`
-    );
+    const datetime = `${format(new Date(date), "yyyy-MM-dd")}T${time}:00`;
 
     const mov_caixa = {
       product,
