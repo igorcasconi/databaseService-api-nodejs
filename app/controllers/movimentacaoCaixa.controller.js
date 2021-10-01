@@ -49,13 +49,17 @@ export default class MovimentacaoCaixaController {
           { product: "Movimentacao_Caixa_product" },
           { value: "Movimentacao_Caixa_value" },
           { payMode: "Movimentacao_Caixa_Paymode" },
-          { date: "Movimentacao_Caixa_date" }
+          {
+            date: db.raw("DATE_FORMAT(Movimentacao_Caixa_date, '%Y-%m-%dT%T')"),
+          }
         )
         .where({
           Movimentacao_Caixa_userFirebase: id,
           Movimentacao_Caixa_Tipo_Movimentacao_id: type,
         })
         .orderBy("Movimentacao_Caixa_date", "desc");
+
+      console.log(query);
 
       return res.status(200).json({
         data: query,
