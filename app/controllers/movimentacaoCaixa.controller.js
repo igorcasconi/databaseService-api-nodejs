@@ -51,7 +51,7 @@ export default class MovimentacaoCaixaController {
           { payMode: "Movimentacao_Caixa_Paymode" },
           {
             date: db.raw(
-              "DATE_FORMAT(Movimentacao_Caixa_date, '%Y-%m-%dT%T.%f')"
+              "DATE_FORMAT(Movimentacao_Caixa_date, '%d/%m/%Y %H:%i')"
             ),
           }
         )
