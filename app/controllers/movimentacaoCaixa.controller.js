@@ -1,5 +1,4 @@
-import { parseISO, format } from "date-fns";
-import { utcToZonedTime } from "date-fns-tz";
+import { format } from "date-fns";
 
 import db from "../database/connection";
 export default class MovimentacaoCaixaController {
@@ -61,7 +60,39 @@ export default class MovimentacaoCaixaController {
         })
         .orderBy("Movimentacao_Caixa_date", "desc");
 
-      console.log(query);
+      return res.status(200).json({
+        data: query,
+      });
+    } catch (err) {
+      return res.status(500).json({
+        message:
+          err.message ?? "Ocorreu um erro ao realizar busca por movimentações!",
+      });
+    }
+  }
+
+  async AllFinancialMovement(req, res) {
+    const { id } = req.params;
+
+    try {
+      const query = await db
+        .from("Movimentacao_Caixas")
+        .select(
+          { id: "Movimentacao_Caixa_id" },
+          { product: "Movimentacao_Caixa_product" },
+          { value: "Movimentacao_Caixa_value" },
+          { paymode: "Movimentacao_Caixa_Paymode" },
+          { date: "Movimentacao_Caixa_date" },
+          {
+            type: db.raw(
+              `CASE WHEN Movimentacao_Caixa_Tipo_Movimentacao_id = 1 THEN 'Entries' ELSE 'Outflows' END`
+            ),
+          }
+        )
+        .where({
+          Movimentacao_Caixa_userFirebase: id,
+        })
+        .orderBy("Movimentacao_Caixa_date", "desc");
 
       return res.status(200).json({
         data: query,

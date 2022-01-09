@@ -9,6 +9,10 @@ const MovimentacaoCaixa = new MovimentacaoCaixaController();
 
 router.post("/create-saldo", CaixaSaldo.create);
 
+router.get(
+  "/all-financial-movement/:id",
+  MovimentacaoCaixa.AllFinancialMovement
+);
 router.post("/create-mov/:id/:type", MovimentacaoCaixa.create);
 router.get(
   "/financial-movement/:id/:type",
